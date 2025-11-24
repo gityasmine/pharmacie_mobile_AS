@@ -1,0 +1,21 @@
+*.iml
+.gradle
+/local.properties
+
+# Ignore the entire .idea folder (avoids committing machine config)
+.idea/
+
+# OS files
+.DS_Store
+
+# Build outputs
+/build
+**/build
+
+# Android Studio folders
+/captures
+.externalNativeBuild
+.cxx
+
+# Duplicate local.properties ignore
+local.properties
