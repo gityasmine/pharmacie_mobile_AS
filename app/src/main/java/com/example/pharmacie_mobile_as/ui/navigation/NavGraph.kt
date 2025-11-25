@@ -19,9 +19,6 @@ sealed class Screen(val route: String) {
     object Detail : Screen("detail/{medicamentId}") {
         fun createRoute(medicamentId: Int) = "detail/$medicamentId"
     }
-    object Edit : Screen("edit/{medicamentId}") {
-        fun createRoute(medicamentId: Int) = "edit/$medicamentId"
-    }
 }
 
 @Composable
@@ -35,7 +32,6 @@ fun NavGraph(navController: NavHostController, viewModel: MedicamentViewModel = 
                 onSearch = { query -> viewModel.searchMedicaments(query) },
                 onAddClick = { navController.navigate(Screen.Add.route) },
                 onMedicamentClick = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
-                onEditClick = { id -> navController.navigate(Screen.Edit.createRoute(id)) },
                 onDeleteClick = { medicament -> viewModel.deleteMedicament(medicament) }
             )
         }
@@ -56,7 +52,9 @@ fun NavGraph(navController: NavHostController, viewModel: MedicamentViewModel = 
             arguments = listOf(navArgument("medicamentId") { type = NavType.IntType })
         ) { backStackEntry ->
             val medicamentId = backStackEntry.arguments?.getInt("medicamentId") ?: 0
-            var medicament by remember { mutableStateOf<com.example.pharmacie_mobile_as.domain.model.Medicament?>(null) }
+            var medicament by remember {
+                mutableStateOf<com.example.pharmacie_mobile_as.domain.model.Medicament?>(null)
+            }
 
             LaunchedEffect(medicamentId) {
                 medicament = viewModel.getMedicamentById(medicamentId)
@@ -65,27 +63,6 @@ fun NavGraph(navController: NavHostController, viewModel: MedicamentViewModel = 
             MedicamentDetailScreen(
                 medicament = medicament,
                 onBackClick = { navController.navigateUp() }
-            )
-        }
-
-        composable(
-            route = Screen.Edit.route,
-            arguments = listOf(navArgument("medicamentId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val medicamentId = backStackEntry.arguments?.getInt("medicamentId") ?: 0
-            var medicament by remember { mutableStateOf<com.example.pharmacie_mobile_as.domain.model.Medicament?>(null) }
-
-            LaunchedEffect(medicamentId) {
-                medicament = viewModel.getMedicamentById(medicamentId)
-            }
-
-            AddEditMedicamentScreen(
-                medicament = medicament,
-                onBackClick = { navController.navigateUp() },
-                onSaveClick = { denomination, forme, quantite, photo ->
-                    viewModel.updateMedicament(medicamentId, denomination, forme, quantite, photo)
-                    navController.navigateUp()
-                }
             )
         }
     }

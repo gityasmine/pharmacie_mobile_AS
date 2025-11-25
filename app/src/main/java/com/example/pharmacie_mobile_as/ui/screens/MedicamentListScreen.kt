@@ -23,7 +23,6 @@ fun MedicamentListScreen(
     onSearch: (String) -> Unit,
     onAddClick: () -> Unit,
     onMedicamentClick: (Int) -> Unit,
-    onEditClick: (Int) -> Unit,
     onDeleteClick: (Medicament) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -81,7 +80,7 @@ fun MedicamentListScreen(
                     items(uiState.medicaments, key = { it.id }) { medicament ->
                         MedicamentCard(
                             medicament = medicament,
-                            onEdit = { onEditClick(medicament.id) },
+                            onEdit = { },
                             onDelete = { onDeleteClick(medicament) },
                             onClick = { onMedicamentClick(medicament.id) }
                         )
